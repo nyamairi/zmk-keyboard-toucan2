@@ -110,14 +110,6 @@
             track-remainders;
         };
 
-        is_touching_processor:is_touching_processor {
-            compatible = "zmk,input-processor-behaviors";
-            #input-processor-cells = <0>;
-
-            codes = <INPUT_BTN_TOUCH>;      // watch for the 'touch' pseudo button
-            bindings  = <&mo 5>;            // Activate MOUS layer (layer 5) while touching
-        };
-
         swipe_button_mapper: swipe_button_mapper {
             compatible = "zmk,input-processor-behaviors";
             #input-processor-cells = <0>;
@@ -145,15 +137,14 @@
         compatible = "zmk,input-listener";
         status = "disabled";
         device = <&trackpad_split>;
-        input-processors = <&zip_xy_scaler 100 100>, <&zip_scroll_scaler 1 20>, <&zip_zoom_mapper>, <&is_touching_processor>, <&swipe_button_mapper>;
+        input-processors = <&zip_xy_scaler 100 100>, <&zip_scroll_scaler 1 20>, <&zip_zoom_mapper>, <&swipe_button_mapper>;
         scroller {
-            /* Keep Toucan1's layer-activated single-finger scroll on NAV (1) and SCRL (6). */
+            /* Toucan1 custom scroll layers: NAV (1) and SCRL (6). */
             layers = <1 6>;
             input-processors = <
-                &zip_xy_transform INPUT_TRANSFORM_Y_INVERT
                 &zip_xy_to_scroll_mapper
-                &zip_scroll_scaler 1 20
-                &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
+                &zip_scroll_scaler 1 5
+                &zip_scroll_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
             >;
         };
     };
