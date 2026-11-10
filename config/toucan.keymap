@@ -7,14 +7,46 @@
 #define BASE 0
 #define NAV  1
 #define SYM  2
-#define ADJ  3
+#define NUM  3
+#define FUN  4
+#define MOUS 5
+#define SCRL 6
 
 / {
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-        tri_layer {
-            if-layers = <1 2>;
-            then-layer = <3>;
+    behaviors {
+        jpseco: jp_semicolon {
+            compatible  = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp SEMI>, <&kp PLUS>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        jpmins: jp_minus {
+            compatible  = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp MINUS>, <&kp EQUAL>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        jpcart: jp_caret {
+            compatible  = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp CARET>, <&kp TILDE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        jpatsn: jp_at_sign {
+            compatible  = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp AT>, <&kp GRAVE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        jpcoln: jp_colon {
+            compatible  = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COLON>, <&kp ASTERISK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
         };
     };
 
@@ -24,10 +56,10 @@
         base {
             display-name = "BASE";
             bindings = <
-                &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
-                &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-                &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp ESC
-                                &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
+                &kp TAB       &kp Q  &kp W  &kp E  &kp R  &kp T   &kp Y  &kp U    &kp I      &kp O    &kp P     &kp BSPC
+                &kp LGUI      &kp A  &kp S  &kp D  &kp F  &kp G   &kp H  &lt 5 J  &kp K      &kp L    &jpseco   &jpmins
+                &kp LSHFT     &kp Z  &kp X  &kp C  &kp V  &kp B   &kp N  &kp M    &kp COMMA  &kp DOT  &kp FSLH  &kp ENTER
+                &lt 1 LG(C)   &mt LALT SPACE  &mt LCTRL LANG2   &lt 3 LANG1  &lt 2 SPACE  &lt 4 LG(V)
             >;
         };
 
@@ -37,46 +69,58 @@
                 &kp TAB     &kp N1          &kp N2       &kp N3       &kp N4       &kp N5         &kp N6   &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
                 &bt BT_CLR  &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
                 &kp LSHFT   &studio_unlock  &trans       &trans       &trans       &trans         &trans   &trans   &trans &trans    &trans &trans
-                                                &kp LGUI     &trans       &kp SPACE      &kp RET  &trans   &kp RALT
+                                            &kp LGUI     &trans       &kp SPACE      &kp RET  &trans   &kp RALT
             >;
         };
 
         sym {
             display-name = "SYM";
             bindings = <
-                &kp TAB   &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR &kp RPAR &kp BSPC
-                &kp LCTRL &trans   &trans &trans   &trans   &trans      &kp MINUS &kp EQUAL &kp LBKT        &kp RBKT &kp BSLH &kp GRAVE
-                &kp LSHFT &trans   &trans &trans   &trans   &trans      &kp UNDER &kp PLUS  &kp LBRC        &kp RBRC &kp PIPE &kp TILDE
-                                          &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
+                &kp ESC  &kp EXCL  &kp DQT  &kp HASH  &kp DLLR  &kp PRCNT   &trans  &trans    &kp UP    &trans     &trans  &kp DEL
+                &trans   &kp AMPS  &kp SQT  &kp LPAR  &kp RPAR  &jpcart     &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &kp UNDER
+                &trans   &jpatsn   &jpcoln  &kp LBKT  &kp RBKT  &kp BSLH    &trans  &trans    &trans    &trans     &trans  &trans
+                                                   &trans  &trans  &trans   &trans  &trans  &trans
             >;
         };
 
-        adj {
-            display-name = "ADJ";
+        num {
+            display-name = "NUM";
             bindings = <
-                &mo TAB   &trans &kp F7 &kp F8 &kp F9 &kp F12   &kp C_VOL_DN &kp C_MUTE  &kp C_VOL_UP &trans &trans &kp BSPC
-                &kp LCTRL &trans &kp F4 &kp F5 &kp F6 &kp F11   &trans       &trans      &trans       &trans &trans &trans
-                &bt LSHFT &trans &kp F1 &kp F2 &kp F3 &kp F10   &trans       &trans      &trans       &trans &trans &trans
-                                   &kp LGUI &mo NAV &kp SPACE   &kp RET &mo 2 &kp RALT
+                &kp ESC  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5   &trans  &trans    &kp UP    &trans     &trans  &kp DEL
+                &trans   &kp N6  &kp N7  &kp N8  &kp N9  &kp N0   &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &kp UNDER
+                &trans   &trans  &trans  &trans  &trans  &trans   &trans  &trans    &trans    &trans     &trans  &trans
+                                         &trans  &trans  &trans   &trans  &trans  &trans
+            >;
+        };
+
+        fun {
+            display-name = "FUN";
+            bindings = <
+                &kp ESC  &kp F1   &kp F2   &kp F3   &kp F4   &kp F5    &trans  &trans    &kp UP    &trans     &trans  &kp DEL
+                &trans   &kp F6   &kp F7   &kp F8   &kp F9   &kp F10   &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &kp UNDER
+                &trans   &kp F11  &kp F12  &kp F13  &kp F14  &kp F15   &trans  &trans    &trans    &trans     &trans  &trans
+                                              &trans  &trans  &trans   &trans  &trans  &trans
             >;
         };
 
         mouse {
-            display-name = "MOU";
+            display-name = "MOUS";
             bindings = <
-                &trans &trans &trans &trans &trans &trans           &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans           &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans           &trans &trans &trans &trans &trans &trans
-                            &mkp MCLK &mkp LCLK &mkp RCLK           &mkp LCLK &mkp RCLK &mkp MCLK
+                &kp ESC  &trans  &trans  &trans  &trans  &trans   &kp LC(UP)  &trans  &trans  &trans  &trans  &kp DEL
+                &trans   &trans  &trans  &trans  &trans  &trans   &mkp MB2    &trans  &trans  &trans  &trans  &kp UNDER
+                &trans   &trans  &trans  &trans  &trans  &trans   &mkp MB3    &trans  &mo 6  &trans  &trans  &trans
+                                         &trans  &trans  &trans   &mkp MB1  &trans  &trans
             >;
         };
 
-        extra_2 {
-                status = "reserved";
-        };
-
-        extra_3 {
-                status = "reserved";
+        scroll {
+            display-name = "SCRL";
+            bindings = <
+                &kp ESC  &trans  &trans  &trans  &trans  &trans   &kp LC(UP)  &trans  &trans  &trans  &trans  &kp DEL
+                &trans   &trans  &trans  &trans  &trans  &trans   &mkp MB2    &trans  &trans  &trans  &trans  &kp UNDER
+                &trans   &trans  &trans  &trans  &trans  &trans   &mkp MB3    &trans  &trans  &trans  &trans  &trans
+                                         &trans  &trans  &trans   &mkp MB1  &trans  &trans
+            >;
         };
     };
 };
